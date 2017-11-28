@@ -75,9 +75,9 @@ void AiPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
 	 char **boardarray=board->getBoardTable();
 	 char **temparray=tempboard->getBoardTable();
 	 //copy cells content from main board to temp board
-	 for (int i=0;i<board->getRowSize();i++){
+	 for (int k=0;k<board->getRowSize();k++){
 		 for (int j=0;j<board->getColumnSize();j++) {
-			 temparray[i][j]=boardarray[i][j];
+			 temparray[k][j]=boardarray[k][j];
 		 }
 	 }
 	 //tempboard->print();
@@ -91,32 +91,30 @@ void AiPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
 		 vector<Point>&humanmovesref=humanmoves;
 		 //check human player possible moves
 		 logic->availableMoves(humanmovesref,tempboard,othersymbol,symbol);
-		 logic->sortPoints(humanmovesref);
-		 logic->removeDuplicatePoints(humanmovesref);
 		 //for each possible human move
-		 for (unsigned int i=0;i<humanmoves.size();i++) {
+		 for (unsigned int n=0;n<humanmoves.size();n++) {
 			 int humandiscs=0;
 			 int aidiscs=0;
 			 Board *humantempboard=new Board(board->getRowSize(),board->getColumnSize());
 			 char**tempboardhuman=humantempboard->getBoardTable();
 			 vector<int> movemark;
 			 //give the human board the current move of the computer
-			 for (int i=0;i<board->getRowSize();i++){
+			 for (int m=0;m<board->getRowSize();m++){
 				 for (int j=0;j<board->getColumnSize();j++) {
-					 tempboardhuman[i][j]=temparray[i][j];
+					 tempboardhuman[m][j]=temparray[m][j];
 				 }
 			 }
-			 Point currentHumanMove(humanmoves.at(i).getPointX(),
-					 humanmoves.at(i).getPointY());
+			 Point currentHumanMove(humanmoves.at(n).getPointX(),
+					 humanmoves.at(n).getPointY());
 			 Point &humanMoveRef=currentHumanMove;
 			 logic->flipDiscs(humantempboard,humanMoveRef,othersymbol,symbol);
 			 //humantempboard->print();
-			 for (int i=0;i<humantempboard->getRowSize();i++){
+			 for (int w=0;w<humantempboard->getRowSize();w++){
 				 for (int j=0;j<humantempboard->getColumnSize();j++) {
-					 if (tempboardhuman[i][j]=='X') {
+					 if (tempboardhuman[w][j]=='X') {
 						 humandiscs++;
 					 }
-					 if (tempboardhuman[i][j]=='O') {
+					 if (tempboardhuman[w][j]=='O') {
 						 aidiscs++;
 					 }
 				 }
@@ -125,18 +123,20 @@ void AiPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
 				 score=humandiscs-aidiscs;
 			 }
 			 //clean last human board - go to next human move
-			 for (int i=0;i<board->getRowSize();i++){
+			 for (int v=0;v<board->getRowSize();v++){
 				 for (int j=0;j<board->getColumnSize();j++) {
-					 tempboardhuman[i][j]=temparray[i][j];
+					 tempboardhuman[v][j]=temparray[v][j];
 				 }
 			 }
 			 int xpoint=point.getPointX()-1;
 			 int ypoint=point.getPointY()-1;
 			 temparray[xpoint][ypoint]= 'O';
 			 //tempboard->print();
+			 delete humantempboard;
 		 }
 		 bestAiMoves.push_back(score);
 		 //delete bestmove;
+		 delete tempboard;
  }
  int max=0;
  int bestmoveindex=0;
@@ -160,36 +160,9 @@ void AiPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
  counter = logic->flipDiscs(board,refPoint,symbol,othersymbol);
  setDisksNum(1+counter);
  other->setDisksNum(-counter);
+ board->print();
  cout << symbol_ << " played (" << point.getPointX() << "," << point.getPointY() << ")" << endl <<endl;
 }
 AiPlayer::~AiPlayer() {
 	// TODO Auto-generated destructor stub
 }
-/*bool legal = false;
- cout << "Please enter your move row col:";
- while (true){
-   while (true){
-     cin >> row >> column;
-     if (!cin.fail()){
-       //skip bad input
-       cin.ignore(256, '\n');
-       break;
-     }
-     else{
-       // user didn't input a number/bad number and char combo
-       cout << "Please enter numbers only." << endl;
-       cin.clear();
-       cin.ignore(256, '\n');
-     }
-   }
-   for (int i = 0; i < possiblemoves.size(); i++) {
-     if (possiblemoves.at(i).getPointX() == row) {
-       if (possiblemoves.at(i).getPointY() == column ) {
-         legal = true;
-       }
-     }
-   }
-   if (legal == true)
-       break;
-   cout << "illegal move. choose another:";
- }*/

@@ -14,6 +14,17 @@ CPP_SRCS += \
 ../ReversiLogic.cpp \
 ../main.cpp 
 
+O_SRCS += \
+../AiPlayer.o \
+../Board.o \
+../Game.o \
+../GameLogic.o \
+../HumanPlayer.o \
+../Player.o \
+../Point.o \
+../ReversiLogic.o \
+../main.o 
+
 OBJS += \
 ./AiPlayer.o \
 ./Board.o \

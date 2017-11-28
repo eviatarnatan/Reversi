@@ -46,9 +46,10 @@ void Game::play() {
   playerX_->setMyTurn(true);
   Player *&refX=playerX_;
   Player *&refO=playerO_;
+  gameboard_->print();
   //if true, each player takes his turn, breaks if both can't move.
   while (playerX_->getMyTurn() == true||playerO_->getMyTurn() == true) {
-    gameboard_->print();
+    //gameboard_->print();
     //checks if it's X player turn.
     if (playerX_->getMyTurn() == true) {
       playerX_->turn(logic_, gameboard_, refO);
@@ -103,5 +104,7 @@ Game::~Game() {
   // TODO Auto-generated destructor stub
   delete gameboard_;
   delete logic_;
+  delete playerX_;
+  delete playerO_;
 }
 

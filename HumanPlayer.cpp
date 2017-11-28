@@ -108,6 +108,7 @@ void HumanPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
  counter = logic->flipDiscs(board,refPoint,symbol,othersymbol);
  setDisksNum(1+counter);
  other->setDisksNum(-counter);
+ board->print();
  cout << symbol_ << " played (" << row << "," << column << ")" << endl <<endl;
 }
 HumanPlayer::~HumanPlayer() {
