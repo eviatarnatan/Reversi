@@ -1,3 +1,12 @@
+commit b52189c20c0bbf5f008b4c728cf6b9bcd9294e95
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Wed Nov 29 18:25:19 2017 +0200
+
+    Added the following files: log.txt, Project Choice.txt
+    Added comments for Game.h and AiPlayer.h functions.
+    Fixed bad input infinite loop when entering a game choice.
+    Changed several variables names.
+
 commit 4e3b5d8a206bb57bad7a702772a5e06b756cd976
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Tue Nov 28 21:55:04 2017 +0200
