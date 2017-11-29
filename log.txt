@@ -1,0 +1,16 @@
+commit 4e3b5d8a206bb57bad7a702772a5e06b756cd976
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Tue Nov 28 21:55:04 2017 +0200
+
+    Fixed memory leaks in AiPlayer and Game classes.
+    Removed warnings.
+    Player chosen move will now be displayed after printing the new board state.
+
+commit 94c3cf6f2d94185f1a7824276401dc1ba854c646
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Tue Nov 28 17:47:50 2017 +0200
+
+    Reversi Project
+    added the project, which now contains two play modes:
+    1. Human vs Human
+    2. Human vs Computer

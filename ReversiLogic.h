@@ -37,7 +37,7 @@ public:
    * returns a counter which represents the amount of discs
    * that has been flipped.
    */
-  virtual int flipDiscs(Board*& board,Point &ref_Point,char&symbol,
+  virtual int flipDiscs(Board*& board,Point &ref_point,char&symbol,
       char& other_symbol);
   /* same as availableMoves, but specific for vertical moves.
   */
@@ -69,25 +69,25 @@ public:
    * flips discs up and down from the player's chosen point.
    * and counts them.
    */
-  void verticalFlip(Board*& board,int& counter,Point& ref_Point,
+  void verticalFlip(Board*& board,int& counter,Point& ref_point,
       char& symbol,char &other_symbol);
   /*
    * flips discs left and right from the player's chosen point.
    * and counts them.
    */
-  void horizontalFlip(Board*& board,int& counter,Point& ref_Point,
+  void horizontalFlip(Board*& board,int& counter,Point& ref_point,
       char& symbol,char &other_symbol);
   /*
    * flips discs top left and top right from the player's chosen point.
    * and counts them.
    */
-  void topDiagonalFlip(Board*& board, int& counter, Point& ref_Point,
+  void topDiagonalFlip(Board*& board, int& counter, Point& ref_point,
       char& symbol, char &other_symbol);
   /*
    * flips discs bottom left and bottom right from the player's chosen point.
    * and counts them.
    */
-  void bottomDiagonalFlip(Board*& board, int& counter, Point& ref_Point,
+  void bottomDiagonalFlip(Board*& board, int& counter, Point& ref_point,
       char& symbol, char& other_symbol);
   /*
    * default destructor.

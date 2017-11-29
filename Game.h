@@ -31,6 +31,12 @@ public:
    * constructor - creates a new specific gamelogic and a dynamic board.
    */
   Game();
+  /*
+   * game initialization. prints a message for the user to choose a game
+   * against another player or against the computer. after a valid choice
+   * from the user, the appropriate 2nd player (human or computer) will be
+   * created.
+   */
   void initialize();
   /*
    * the gameflow. each time one player plays it's turn. after each turn,

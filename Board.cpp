@@ -12,43 +12,43 @@
 #include "Board.h"
 #include <iostream>
 using namespace std;
-Board::Board(int rowS,int columnS) {
-  rowsize_ = rowS;
-  columnsize_ = columnS;
-  boardtable_ = new char*[rowsize_];
-  for (int i = 0; i < rowsize_; ++i) {
-      boardtable_[i] = new char[columnsize_];
+Board::Board(int row_size,int column_size) {
+  row_size_ = row_size;
+  column_size_ = column_size;
+  board_table_ = new char*[row_size_];
+  for (int i = 0; i < row_size_; ++i) {
+      board_table_[i] = new char[column_size_];
     }
-  for (int i = 0; i < rowsize_; ++i) {
-    for (int j = 0;j < columnsize_; ++j) {
-      boardtable_[i][j] = ' ';
+  for (int i = 0; i < row_size_; ++i) {
+    for (int j = 0;j < column_size_; ++j) {
+      board_table_[i][j] = ' ';
     }
   }
-  boardtable_[rowsize_/2-1][columnsize_/2-1] = 'O';
-  boardtable_[rowsize_/2-1][columnsize_/2] = 'X';
-  boardtable_[rowsize_/2][columnsize_/2-1] = 'X';
-  boardtable_[rowsize_/2][columnsize_/2] = 'O';
+  board_table_[row_size_/2-1][column_size_/2-1] = 'O';
+  board_table_[row_size_/2-1][column_size_/2] = 'X';
+  board_table_[row_size_/2][column_size_/2-1] = 'X';
+  board_table_[row_size_/2][column_size_/2] = 'O';
 }
 
 void Board::print() {
   cout << "Current board:" << endl << endl;
-  for (int i = 1; i < columnsize_ + 1; i++){
+  for (int i = 1; i < column_size_ + 1; i++){
     cout << " | " << i;
   }
   cout << " |" << endl;
   cout << "--";
-  for (int i = 0; i < columnsize_; i++){
+  for (int i = 0; i < column_size_; i++){
     cout << "----";
   }
   cout << endl;
-  for (int i = 0; i < rowsize_; ++i) {
+  for (int i = 0; i < row_size_; ++i) {
     cout << i+1 << "| ";
-    for (int j = 0; j < columnsize_; ++j) {
-      cout << boardtable_[i][j] << " | ";
+    for (int j = 0; j < column_size_; ++j) {
+      cout << board_table_[i][j] << " | ";
     }
     cout << endl;
     cout << "--";
-    for (int i = 0; i < columnsize_; i++){
+    for (int i = 0; i < column_size_; i++){
     cout << "----";
     }
     cout << endl;
@@ -56,21 +56,21 @@ void Board::print() {
 }
 
 char** Board::getBoardTable() {
-  return boardtable_;
+  return board_table_;
 }
 void Board::setBoardTable(char** table) {
-  boardtable_ = table;
+  board_table_ = table;
 }
 int Board::getRowSize() {
-  return rowsize_;
+  return row_size_;
 }
 int Board::getColumnSize() {
-  return columnsize_;
+  return column_size_;
 }
 Board::~Board() {
-  for (int i=0;i<rowsize_;++i) {
-    delete [] boardtable_[i];
+  for (int i=0;i<row_size_;++i) {
+    delete [] board_table_[i];
   }
-  delete [] boardtable_;
+  delete [] board_table_;
 }
 

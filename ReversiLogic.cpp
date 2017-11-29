@@ -24,14 +24,14 @@ ReversiLogic::ReversiLogic() {
   bottomDiagonalMoves(board, points, symbol, other_symbol);
 
 }
-int ReversiLogic::flipDiscs(Board*& board,Point &ref_Point,
+int ReversiLogic::flipDiscs(Board*& board,Point &ref_point,
     char&symbol,char &other_symbol) {
   int counter = 0;
-  int&countref = counter;
-  verticalFlip(board, countref, ref_Point, symbol, other_symbol);
-  horizontalFlip(board, countref, ref_Point, symbol, other_symbol);
-  topDiagonalFlip(board, countref, ref_Point, symbol, other_symbol);
-  bottomDiagonalFlip(board, countref, ref_Point, symbol, other_symbol);
+  int&count_ref = counter;
+  verticalFlip(board, count_ref, ref_point, symbol, other_symbol);
+  horizontalFlip(board, count_ref, ref_point, symbol, other_symbol);
+  topDiagonalFlip(board, count_ref, ref_point, symbol, other_symbol);
+  bottomDiagonalFlip(board, count_ref, ref_point, symbol, other_symbol);
   return counter;
 }
 void ReversiLogic::sortPoints(vector<Point>& moves) {
@@ -272,11 +272,11 @@ void ReversiLogic::bottomDiagonalMoves(Board*&board,vector<Point> &moves,
     }
   }
 }
-void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_Point,
+void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_point,
     char &current, char &standby) {
   //top
-  int i = ref_Point.getPointX() - 2;
-  int j = ref_Point.getPointY() - 1;
+  int i = ref_point.getPointX() - 2;
+  int j = ref_point.getPointY() - 1;
   int row_size = board->getRowSize();
   char** board_array = board->getBoardTable();
   board_array[i + 1][j] = current;
@@ -286,7 +286,7 @@ void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_Point,
         i--;
       }
       if (board_array[i][j] == current) {
-        for (int l = ref_Point.getPointX() - 2; l > i; l--) {
+        for (int l = ref_point.getPointX() - 2; l > i; l--) {
           counter++;
           board_array[l][j] = current;
         }
@@ -294,8 +294,8 @@ void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_Point,
     }
   }
   //down
-  i = ref_Point.getPointX();
-  j = ref_Point.getPointY() - 1;
+  i = ref_point.getPointX();
+  j = ref_point.getPointY() - 1;
   if (i < row_size) {
     if (board_array[i][j] == standby && i < row_size) {
       while (board_array[i][j] == standby && i < row_size) {
@@ -305,7 +305,7 @@ void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_Point,
         }
       }
       if (board_array[i][j] == current) {
-        for (int l = ref_Point.getPointX(); l < i; l++) {
+        for (int l = ref_point.getPointX(); l < i; l++) {
           counter++;
           board_array[l][j] = current;
         }
@@ -313,11 +313,11 @@ void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_Point,
     }
   }
 }
-void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_Point,
+void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_point,
     char &current, char &standby) {
   //left
-  int i = ref_Point.getPointX() - 1;
-  int j = ref_Point.getPointY() - 2;
+  int i = ref_point.getPointX() - 1;
+  int j = ref_point.getPointY() - 2;
   int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   if (j >= 0) {
@@ -326,7 +326,7 @@ void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_Point,
         j--;
       }
       if (board_array[i][j] == current) {
-        for (int m = ref_Point.getPointY() - 2; m > j; m--) {
+        for (int m = ref_point.getPointY() - 2; m > j; m--) {
           counter++;
           board_array[i][m] = current;
         }
@@ -334,8 +334,8 @@ void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_Point,
     }
   }
   //right
-  i = ref_Point.getPointX() - 1;
-  j = ref_Point.getPointY();
+  i = ref_point.getPointX() - 1;
+  j = ref_point.getPointY();
   if (j < column_size - 1) {
     if (board_array[i][j] == standby && j < column_size - 1) {
       while (board_array[i][j] == standby && j < column_size - 1) {
@@ -343,7 +343,7 @@ void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_Point,
       }
       if (j < column_size) {
         if (board_array[i][j] == current) {
-          for (int m = ref_Point.getPointY();m < j; m++) {
+          for (int m = ref_point.getPointY();m < j; m++) {
             counter++;
             board_array[i][m] = current;
           }
@@ -353,10 +353,10 @@ void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_Point,
   }
 }
 void ReversiLogic::topDiagonalFlip(Board*& board, int& counter,
-    Point&ref_Point, char &current, char &standby) {
+    Point&ref_point, char &current, char &standby) {
   //top left
-  int i = ref_Point.getPointX() - 2;
-  int j = ref_Point.getPointY() - 2;
+  int i = ref_point.getPointX() - 2;
+  int j = ref_point.getPointY() - 2;
   int column_size = board->getColumnSize();
   char** board_array=board->getBoardTable();
   if (j >= 0 && i >= 0) {
@@ -366,8 +366,8 @@ void ReversiLogic::topDiagonalFlip(Board*& board, int& counter,
         j--;
       }
       if (board_array[i][j] == current) {
-        int l = ref_Point.getPointX() - 2;
-        int m = ref_Point.getPointY() - 2;
+        int l = ref_point.getPointX() - 2;
+        int m = ref_point.getPointY() - 2;
         while (l > i && m > j) {
           board_array[l][m] = current;
           l--;
@@ -378,8 +378,8 @@ void ReversiLogic::topDiagonalFlip(Board*& board, int& counter,
     }
   }
   //top right
-  i = ref_Point.getPointX() - 2;
-  j = ref_Point.getPointY();
+  i = ref_point.getPointX() - 2;
+  j = ref_point.getPointY();
   if (i >= 0 && j < column_size) {
     if (board_array[i][j] == standby && j < column_size - 1 && i > 0) {
       while (board_array[i][j] == standby && i > 0 && j < column_size - 1) {
@@ -388,8 +388,8 @@ void ReversiLogic::topDiagonalFlip(Board*& board, int& counter,
       }
       if (i >= 0 && j < column_size) {
         if (board_array[i][j] == current) {
-          int l = ref_Point.getPointX() - 2;
-          int m = ref_Point.getPointY();
+          int l = ref_point.getPointX() - 2;
+          int m = ref_point.getPointY();
           while (l > i && m < j) {
             board_array[l][m] = current;
             l--;
@@ -402,10 +402,10 @@ void ReversiLogic::topDiagonalFlip(Board*& board, int& counter,
   }
 }
 void ReversiLogic::bottomDiagonalFlip(Board*& board, int& counter,
-    Point&ref_Point, char &current, char &standby) {
+    Point&ref_point, char &current, char &standby) {
   //bottom left
-  int i = ref_Point.getPointX();
-  int j = ref_Point.getPointY() - 2;
+  int i = ref_point.getPointX();
+  int j = ref_point.getPointY() - 2;
   int row_size = board->getRowSize();
   int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
@@ -420,8 +420,8 @@ void ReversiLogic::bottomDiagonalFlip(Board*& board, int& counter,
       }
       if (i < row_size && j >= 0) {
         if (board_array[i][j] == current) {
-          int l = ref_Point.getPointX();
-          int m = ref_Point.getPointY() - 2;
+          int l = ref_point.getPointX();
+          int m = ref_point.getPointY() - 2;
           while (l < i && m > j) {
             board_array[l][m] = current;
             l++;
@@ -433,8 +433,8 @@ void ReversiLogic::bottomDiagonalFlip(Board*& board, int& counter,
     }
   }
   //bottom right
-  i = ref_Point.getPointX();
-  j = ref_Point.getPointY();
+  i = ref_point.getPointX();
+  j = ref_point.getPointY();
   if (j < column_size && i < row_size) {
     if (board_array[i][j] == standby && j < column_size && i < row_size) {
       while (board_array[i][j] == standby && i < row_size && j < column_size) {
@@ -446,8 +446,8 @@ void ReversiLogic::bottomDiagonalFlip(Board*& board, int& counter,
       }
       if (i < row_size && j < column_size) {
         if (board_array[i][j] == current) {
-          int l = ref_Point.getPointX();
-          int m = ref_Point.getPointY();
+          int l = ref_point.getPointX();
+          int m = ref_point.getPointY();
           while (l < i && m < j) {
             counter++;
             board_array[l][m] = current;

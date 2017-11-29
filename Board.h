@@ -45,9 +45,9 @@ public:
    */
   virtual ~Board();
 private:
-  char** boardtable_;
-  int rowsize_;
-  int columnsize_;
+  char** board_table_;
+  int row_size_;
+  int column_size_;
 };
 
 #endif /* BOARD_H_ */

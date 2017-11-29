@@ -40,8 +40,8 @@ void HumanPlayer::setOppositeSymbol(char other_symbol) {
 }
 void HumanPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
  int row, column;
- vector<Point> possiblemoves;
- vector<Point>& ref=possiblemoves;
+ vector<Point> possible_moves;
+ vector<Point>& moves_ref=possible_moves;
  //sets 'X' symbol for the first player, 'O' for second
  if (getSymbol() == ' ') {
    setSymbol('X');
@@ -50,22 +50,22 @@ void HumanPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
    other->setOppositeSymbol('X');
  }
  char &symbol = symbol_;
- char &othersymbol = other_symbol_;
- cout << symbol_ <<": It's your move." << endl;
- logic->availableMoves(ref, board, symbol, othersymbol);
- if (possiblemoves.empty() == false) {
-   logic->sortPoints(ref);
-   logic->removeDuplicatePoints(ref);
+ char &other_symbol = other_symbol_;
+ cout << symbol_ << ": It's your move." << endl;
+ logic->availableMoves(moves_ref, board, symbol, other_symbol);
+ if (possible_moves.empty() == false) {
+   logic->sortPoints(moves_ref);
+   logic->removeDuplicatePoints(moves_ref);
    cout << "Your possible moves: ";
    //print available moves
-   for (unsigned int i = 0; i < possiblemoves.size(); i++) {
+   for (unsigned int i = 0; i < possible_moves.size(); i++) {
      if (i > 0) {
-       cout<<",";
+       cout << ",";
      }
-     cout << "(" << possiblemoves.at(i).getPointX() << "," <<
-         possiblemoves.at(i).getPointY() << ")";
+     cout << "(" << possible_moves.at(i).getPointX() << "," <<
+         possible_moves.at(i).getPointY() << ")";
    }
-   cout << endl<<endl;
+   cout << endl << endl;
  }
  //in case there are no avaiable moves.
  else{
@@ -90,9 +90,9 @@ void HumanPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
        cin.ignore(256, '\n');
      }
    }
-   for (unsigned int i = 0; i < possiblemoves.size(); i++) {
-     if (possiblemoves.at(i).getPointX() == row) {
-       if (possiblemoves.at(i).getPointY() == column ) {
+   for (unsigned int i = 0; i < possible_moves.size(); i++) {
+     if (possible_moves.at(i).getPointX() == row) {
+       if (possible_moves.at(i).getPointY() == column ) {
          legal = true;
        }
      }
@@ -102,14 +102,14 @@ void HumanPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
    cout << "illegal move. choose another:";
  }
  Point point(row,column);
- Point &refPoint = point;
+ Point &ref_point = point;
  int counter = 0;
  //set counter with the current amount of flips occured this turn.
- counter = logic->flipDiscs(board,refPoint,symbol,othersymbol);
+ counter = logic->flipDiscs(board,ref_point,symbol,other_symbol);
  setDisksNum(1+counter);
  other->setDisksNum(-counter);
  board->print();
- cout << symbol_ << " played (" << row << "," << column << ")" << endl <<endl;
+ cout << symbol_ << " played (" << row << "," << column << ")" << endl << endl;
 }
 HumanPlayer::~HumanPlayer() {
 	// TODO Auto-generated destructor stub

@@ -22,33 +22,40 @@ Game::Game() {
 void Game::initialize(){
 	cout << "Welcome to Reversi!" << endl;
 	cout << "Please choose if you would like to play against another player " <<
-			"or against the computer"<<endl;
-	cout << "1) Play against another player" <<endl;
+			"or against the computer" << endl;
+	cout << "1) Play against another player" << endl;
 	cout << "2) Play against the computer" << endl;
-	int choice;
+	int game_choice;
 	do {
-		cin>> choice;
-		if (choice ==1){
-			cout <<"You've chosen a game against another player" <<endl;
-			playerO_=new HumanPlayer();
+		cin >> game_choice;
+		if (!cin.fail()) {
+			//skip bad input if the first number in string is 1 or 2.
+			cin.ignore(256, '\n');
+		} else {
+			cin.clear();
+			cin.ignore(256, '\n');
+		}
+		if (game_choice == 1) {
+			cout << "You've chosen a game against another player" << endl;
+			playerO_ = new HumanPlayer();
 			break;
-		} else if (choice ==2) {
-			cout <<"You've chosen a game against the computer" <<endl;
-			playerO_=new AiPlayer();
+		} else if (game_choice == 2) {
+			cout <<"You've chosen a game against the computer" << endl;
+			playerO_ = new AiPlayer();
 			break;
 		} else {
-			cout << "Invalid choice. Please choose a valid choice." <<endl;
+			cout << "Invalid choice. Please choose a valid choice." << endl;
 		}
-	} while (choice != 1 || choice != 2);
+	} while (game_choice != 1 || game_choice != 2);
 }
 void Game::play() {
   bool no_moves = false;
   playerX_->setMyTurn(true);
-  Player *&refX=playerX_;
-  Player *&refO=playerO_;
+  Player *&refX = playerX_;
+  Player *&refO = playerO_;
   gameboard_->print();
   //if true, each player takes his turn, breaks if both can't move.
-  while (playerX_->getMyTurn() == true||playerO_->getMyTurn() == true) {
+  while (playerX_->getMyTurn() == true || playerO_->getMyTurn() == true) {
     //gameboard_->print();
     //checks if it's X player turn.
     if (playerX_->getMyTurn() == true) {
@@ -69,7 +76,7 @@ void Game::play() {
     else {
       playerO_->turn(logic_, gameboard_, refX);
       if (playerO_->getMyTurn() == false) {
-        if (playerO_->getMyTurn() == false&&playerX_->getMyTurn() == false
+        if (playerO_->getMyTurn() == false && playerX_->getMyTurn() == false
             && no_moves == true)
           break;
         playerX_->setMyTurn(true);

@@ -56,6 +56,11 @@ public:
    * uses the default destructor.
    */
 	virtual ~HumanPlayer();
+private:
+  int disks_num_;
+  bool my_turn_;
+  char symbol_;
+  char other_symbol_;
 };
 
 #endif /* HUMANPLAYER_H_ */

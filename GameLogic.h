@@ -33,7 +33,7 @@ public:
    * case there are possible moves, and the current state of the board.
    */
   virtual void availableMoves(vector<Point>& points,Board*& board,
-      char& symbol,char& othersymbol)=0;
+      char& symbol,char& other_symbol) = 0;
   /*
    * flips discs of the opposite player.
    * receives the current player's and other player symbols (X/O)
@@ -42,18 +42,18 @@ public:
    * returns a counter which represents the amount of discs
    * that has been flipped.
    */
-  virtual int flipDiscs(Board*& board,Point &refPoint,
-      char&symbol,char &othersymbol)=0;
+  virtual int flipDiscs(Board*& board,Point &ref_point,
+      char&symbol,char &other_symbol) = 0;
   /*
    * receive a reference to a vector of points and sorts it,
    * first by X values, and second by Y values.
    */
-  virtual void sortPoints(vector<Point>&ref)=0;
+  virtual void sortPoints(vector<Point>&ref) = 0;
   /*
    * receives a reference to a vector of points and removes
    * duplicates.
    */
-  virtual void removeDuplicatePoints(vector<Point>&ref)=0;
+  virtual void removeDuplicatePoints(vector<Point>&ref) = 0;
   /*
    * uses the default destructor.
    */
