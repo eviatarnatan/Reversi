@@ -1,3 +1,27 @@
+commit 072b0b1a575c18bfcd0b8db107eb07c4ff6f250b
+Merge: 9af9ff2 c48e5bf
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Wed Nov 29 20:09:38 2017 +0200
+
+    Merge branch 'master' of https://github.com/eviatarnatan/Reversi
+
+commit 9af9ff2441457253fe8cfc3fff878c0ec0ec75b1
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Wed Nov 29 19:53:30 2017 +0200
+
+    Fixes the last commit.
+    Added the following folders:
+    1. googleTestLib
+    2. tests
+
+commit c48e5bf7edecd185a202c2e3742f034402d90fbc
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Wed Nov 29 19:27:57 2017 +0200
+
+    Added the following files:
+    googleTestLib - the test library of google.
+    tests - the tests for this project.
+
 commit b52189c20c0bbf5f008b4c728cf6b9bcd9294e95
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Wed Nov 29 18:25:19 2017 +0200

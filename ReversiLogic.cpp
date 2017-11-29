@@ -75,8 +75,8 @@ void ReversiLogic::removeDuplicatePoints(vector<Point>&moves) {
 void ReversiLogic::verticalMoves(Board*&board, vector<Point> &moves,
     char &current, char &standby){
   //up
-  int row_size = board->getRowSize();
-  int column_size = board->getColumnSize();
+  const int row_size = board->getRowSize();
+  const int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   for (int i = 0; i < row_size; i++) {
     for (int j = 0; j < column_size; j++) {
@@ -123,8 +123,8 @@ void ReversiLogic::verticalMoves(Board*&board, vector<Point> &moves,
 void ReversiLogic::horizontalMoves(Board*&board, vector<Point> &moves,
     char &current, char &standby){
   //right
-  int row_size = board->getRowSize();
-  int column_size = board->getColumnSize();
+  const int row_size = board->getRowSize();
+  const int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   for (int i = 0; i < row_size; i++) {
     for (int j = 0; j < column_size; j++) {
@@ -168,8 +168,8 @@ void ReversiLogic::horizontalMoves(Board*&board, vector<Point> &moves,
 void ReversiLogic::topDiagonalMoves(Board*&board,vector<Point> &moves,
     char &current,char &standby) {
   //top left
-  int row_size = board->getRowSize();
-  int column_size = board->getColumnSize();
+  const int row_size = board->getRowSize();
+  const int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   for (int i = 0; i < row_size; i++) {
     for (int j = 0; j < column_size; j++) {
@@ -217,8 +217,8 @@ void ReversiLogic::topDiagonalMoves(Board*&board,vector<Point> &moves,
 void ReversiLogic::bottomDiagonalMoves(Board*&board,vector<Point> &moves,
     char &current,char &standby){
   //bottom left
-  int row_size = board->getRowSize();
-  int column_size = board->getColumnSize();
+  const int row_size = board->getRowSize();
+  const int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   for (int i = 0; i < row_size; i++) {
     for (int j = 0; j < column_size; j++) {
@@ -277,7 +277,7 @@ void ReversiLogic::verticalFlip(Board*& board, int& counter, Point&ref_point,
   //top
   int i = ref_point.getPointX() - 2;
   int j = ref_point.getPointY() - 1;
-  int row_size = board->getRowSize();
+  const int row_size = board->getRowSize();
   char** board_array = board->getBoardTable();
   board_array[i + 1][j] = current;
   if (i >= 0) {
@@ -318,7 +318,7 @@ void ReversiLogic::horizontalFlip(Board*& board,int& counter,Point&ref_point,
   //left
   int i = ref_point.getPointX() - 1;
   int j = ref_point.getPointY() - 2;
-  int column_size = board->getColumnSize();
+  const int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   if (j >= 0) {
     if (board_array[i][j] == standby && j > 0) {
@@ -357,7 +357,7 @@ void ReversiLogic::topDiagonalFlip(Board*& board, int& counter,
   //top left
   int i = ref_point.getPointX() - 2;
   int j = ref_point.getPointY() - 2;
-  int column_size = board->getColumnSize();
+  const int column_size = board->getColumnSize();
   char** board_array=board->getBoardTable();
   if (j >= 0 && i >= 0) {
     if (board_array[i][j] == standby && j > 0 && i > 0) {
@@ -406,8 +406,8 @@ void ReversiLogic::bottomDiagonalFlip(Board*& board, int& counter,
   //bottom left
   int i = ref_point.getPointX();
   int j = ref_point.getPointY() - 2;
-  int row_size = board->getRowSize();
-  int column_size = board->getColumnSize();
+  const int row_size = board->getRowSize();
+  const int column_size = board->getColumnSize();
   char** board_array = board->getBoardTable();
   if (j >= 0 && i < row_size) {
     if (board_array[i][j] == standby && j > 0 && i < row_size) {

@@ -1,4 +1,8 @@
 /*
+ * Eviatar Natan
+ * 307851808
+ */
+/*
  * HumanPlayer.h
  *
  *  Created on: Nov 24, 2017

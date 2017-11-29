@@ -3,42 +3,18 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-CPP_SRCS += \
-../AiPlayer.cpp \
-../Board.cpp \
-../Game.cpp \
-../GameLogic.cpp \
-../HumanPlayer.cpp \
-../Player.cpp \
-../Point.cpp \
-../ReversiLogic.cpp \
-../main.cpp 
+CC_SRCS += \
+../googleTestLib/gtest/gtest-all.cc 
+
+CC_DEPS += \
+./googleTestLib/gtest/gtest-all.d 
 
 OBJS += \
-./AiPlayer.o \
-./Board.o \
-./Game.o \
-./GameLogic.o \
-./HumanPlayer.o \
-./Player.o \
-./Point.o \
-./ReversiLogic.o \
-./main.o 
-
-CPP_DEPS += \
-./AiPlayer.d \
-./Board.d \
-./Game.d \
-./GameLogic.d \
-./HumanPlayer.d \
-./Player.d \
-./Point.d \
-./ReversiLogic.d \
-./main.d 
+./googleTestLib/gtest/gtest-all.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-%.o: ../%.cpp
+googleTestLib/gtest/%.o: ../googleTestLib/gtest/%.cc
 	@echo 'Building file: $<'
 	@echo 'Invoking: Cross G++ Compiler'
 	g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
