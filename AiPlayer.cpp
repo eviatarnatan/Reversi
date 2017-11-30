@@ -11,12 +11,12 @@
 
 #include "AiPlayer.h"
 #include <iostream>
-AiPlayer::AiPlayer() {
+AiPlayer::AiPlayer(char symbol, char other_symbol) {
   // TODO Auto-generated constructor stub
   disks_num_ = 2;
   my_turn_ = false;
-  symbol_ = 'O';
-  other_symbol_ = 'X';
+  symbol_ = symbol;
+  other_symbol_ = other_symbol;
 }
 int AiPlayer::getDisksNum() {
   return disks_num_;
@@ -37,7 +37,7 @@ void AiPlayer::setSymbol(char symbol) {
   symbol_ = symbol;
 }
 char AiPlayer::getOppositeSymbol() {
-  return symbol_;
+  return other_symbol_;
 }
 void AiPlayer::setOppositeSymbol(char other_symbol) {
   other_symbol_ = other_symbol;

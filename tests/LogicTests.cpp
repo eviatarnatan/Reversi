@@ -1,4 +1,8 @@
 /*
+ * Eviatar Natan
+ * 307851808
+ */
+/*
  * BoardTest.cpp
  *
  *  Created on: Nov 28, 2017
@@ -9,22 +13,9 @@
 
 namespace {
 	/*
-	 * board initialization test
-	 */
-	TEST(GameTests, board_test) {
-		const int size = 8;
-		Board *board = new Board(size, size);
-		char **boardtable = board->getBoardTable();
-		EXPECT_EQ(size, board->getRowSize());
-		EXPECT_NE(size + 1, board->getColumnSize());
-		EXPECT_EQ('O', boardtable[size / 2][size / 2]);
-		EXPECT_NE('X', boardtable[size / 2 - 1][size / 2 - 1]);
-		delete board;
-	}
-	/*
 	 * check available moves for certain board configuration
 	 */
-	TEST(GameTests, game_logic_available_moves_test) {
+	TEST(LogicTests, available_moves_test) {
 		const int size = 8;
 		const unsigned int number_of_moves = 5;
 		Board *board = new Board(size,size);
@@ -69,7 +60,7 @@ namespace {
 	/*
 	 * checks that duplicate moves are removed.
 	 */
-	TEST(GameTests,game_logic_remove_duplicate_points_test) {
+	TEST(LogicTests, remove_duplicate_points_test) {
 		GameLogic *logic = new ReversiLogic();
 		vector<Point> available_moves;
 		vector <Point> &ref = available_moves;
@@ -86,26 +77,31 @@ namespace {
 		delete logic;
 	}
 	/*
-	 * checks that for a specific board state, the computer chooses it's best move
-	 * note: best move is defined as the first move in the Ai move list, which
-	 * the other player will get the minimum amount of points for it.
+	 * flips discs check.
 	 */
-	TEST(GameTests, AI_test) {
+	TEST(LogicTests, flip_discs_test) {
 		const int size = 8;
+		GameLogic *logic = new ReversiLogic();
 		Board *board = new Board(size,size);
-		char **boardtable = board->getBoardTable();
-		GameLogic *logic = new ReversiLogic;
-		Player *human = new HumanPlayer();
-		Player *computer = new AiPlayer();
-		boardtable[2][3] = 'X';
-		boardtable[3][3] = 'X';
-		computer->turn(logic, board, human);
-		EXPECT_EQ('O', boardtable[2][2]);
-		EXPECT_NE('X', boardtable[3][3]);
-		delete board;
+		char **board_table = board->getBoardTable();
+		Point black_move(3,4);
+		Point white_move(3,3);
+		Point &move_ref = black_move;
+		Point &move2_ref = white_move;
+		int number_of_flips;
+		char black = 'X';
+		char white = 'O';
+		char &black_ref = black;
+		char &white_ref = white;
+		number_of_flips = logic->flipDiscs(board, move_ref, black_ref, white_ref);
+		EXPECT_EQ(1, number_of_flips);
+		EXPECT_NE('O', board_table[3][3]);
+		number_of_flips = logic->flipDiscs(board, move2_ref, white_ref, black_ref);
+		EXPECT_EQ(1, number_of_flips);
+		EXPECT_EQ('O', board_table[3][3]);
+		EXPECT_EQ('O', board_table[2][2]);
 		delete logic;
-		delete human;
-		delete computer;
+		delete board;
 	}
 }
 

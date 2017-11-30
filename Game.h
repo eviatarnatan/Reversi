@@ -50,7 +50,7 @@ public:
    */
   void end();
   /*
-   * destructor - deletes the dynamic allocated logic_ and gameboard_.
+   * destructor - deletes the dynamic allocated logic, game board and players.
    */
   virtual ~Game();
 private:

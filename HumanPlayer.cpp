@@ -11,12 +11,12 @@
 
 #include "HumanPlayer.h"
 #include <iostream>
-HumanPlayer::HumanPlayer() {
+HumanPlayer::HumanPlayer(char symbol,char other_symbol) {
   // TODO Auto-generated constructor stub
   disks_num_ = 2;
   my_turn_ = false;
-  symbol_ = ' ';
-  other_symbol_ = ' ';
+  symbol_ = symbol;
+  other_symbol_ = other_symbol;
 }
 int HumanPlayer::getDisksNum() {
   return disks_num_;
@@ -37,7 +37,7 @@ void HumanPlayer::setSymbol(char symbol) {
   symbol_ = symbol;
 }
 char HumanPlayer::getOppositeSymbol() {
-  return symbol_;
+  return other_symbol_;
 }
 void HumanPlayer::setOppositeSymbol(char other_symbol) {
   other_symbol_ = other_symbol;
@@ -46,13 +46,6 @@ void HumanPlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
  int row, column;
  vector<Point> possible_moves;
  vector<Point>& moves_ref=possible_moves;
- //sets 'X' symbol for the first player, 'O' for second
- if (getSymbol() == ' ') {
-   setSymbol('X');
-   setOppositeSymbol('O');
-   other->setSymbol('O');
-   other->setOppositeSymbol('X');
- }
  char &symbol = symbol_;
  char &other_symbol = other_symbol_;
  cout << symbol_ << ": It's your move." << endl;

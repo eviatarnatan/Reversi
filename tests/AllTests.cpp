@@ -1,4 +1,8 @@
 /*
+ * Eviatar Natan
+ * 307851808
+ */
+/*
  * AllTests.cpp
  *
  *  Created on: Nov 28, 2017
@@ -6,7 +10,7 @@
  */
 #include "gtest/gtest.h"
 
-#include "GameTests.cpp"
+#include "LogicTests.cpp"
 
 int main (int argc,char **argv) {
 	::testing::InitGoogleTest(&argc,argv);

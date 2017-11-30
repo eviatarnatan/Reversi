@@ -12,10 +12,15 @@
 #ifndef AIPLAYER_H_
 #define AIPLAYER_H_
 #include "Player.h"
-
+/*
+ * the class inherits from Player class. responsible of the AI player.
+ */
 class AiPlayer: public Player {
 public:
-	AiPlayer();
+	/*
+	 * creates a new Ai player with a given symbol and opposite symbol.
+	 */
+	AiPlayer(char symbol, char other_symbol);
   /*
    * returns the current amount of discs the player has.
    */

@@ -14,10 +14,9 @@
 #include "GameLogic.h"
 #include "Board.h"
 /*
- * defines a player that participates in the game.
- *
- * note: later on, this class will have other specifically
- * player classes that will inherit from it (human/computer).
+ * declares a player that participates in the game.
+ * serves as an interface which is inherited and defined by
+ * HumanPlayer and AiPlayer classes.
  */
 class Player {
 public:
@@ -25,6 +24,8 @@ public:
    * the constructor - sets the starting number of discs of the player,
    * and sets his turn to false (not his turn). sets his and the other player
    * symbols (X/O) to space ' ', which will be defined on "turn" function.
+   * note: This class serves as an interface. the above is true for the
+   * inherited classes, HumanPlayer and AiPlayer.
    */
   Player();
   /*

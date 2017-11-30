@@ -12,10 +12,12 @@
 #ifndef HUMANPLAYER_H_
 #define HUMANPLAYER_H_
 #include "Player.h"
-
+/*
+ * inherits from Player class. responsible of a HumanPlayer.
+ */
 class HumanPlayer: public Player {
 public:
-	HumanPlayer();
+	HumanPlayer(char symbol, char other_symbol);
   /*
    * returns the current amount of discs the player has.
    */

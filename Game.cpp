@@ -15,7 +15,7 @@ Game::Game() {
   logic_ = new ReversiLogic();
   int row_size = 8,column_size = 8;
   gameboard_ = new Board(row_size,column_size);
-  playerX_=new HumanPlayer();
+  playerX_=new HumanPlayer('X','O');
   initialize();
 
 }
@@ -37,11 +37,11 @@ void Game::initialize(){
 		}
 		if (game_choice == 1) {
 			cout << "You've chosen a game against another player" << endl;
-			playerO_ = new HumanPlayer();
+			playerO_ = new HumanPlayer('O','X');
 			break;
 		} else if (game_choice == 2) {
 			cout <<"You've chosen a game against the computer" << endl;
-			playerO_ = new AiPlayer();
+			playerO_ = new AiPlayer('O','X');
 			break;
 		} else {
 			cout << "Invalid choice. Please choose a valid choice." << endl;

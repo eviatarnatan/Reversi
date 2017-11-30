@@ -1,3 +1,9 @@
+commit 8cc68a041e93345fbbd55c647f9b358bb10bcc56
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Wed Nov 29 22:32:38 2017 +0200
+
+    A few changes for coding style.
+
 commit 072b0b1a575c18bfcd0b8db107eb07c4ff6f250b
 Merge: 9af9ff2 c48e5bf
 Author: EviatarNatan <eviatarnatan1@gmail.com>
