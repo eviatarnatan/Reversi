@@ -1,7 +1,8 @@
-main.o: ../main.cpp ../Game.h ../Board.h ../Player.h ../GameLogic.h \
- ../Point.h ../HumanPlayer.h ../AiPlayer.h ../ReversiLogic.h
+main.o: ../main.cpp ../LocalGame.h ../Board.h ../Player.h ../GameLogic.h \
+ ../Point.h ../HumanPlayer.h ../AiPlayer.h ../ReversiLogic.h ../Printer.h \
+ ../Game.h
 
-../Game.h:
+../LocalGame.h:
 
 ../Board.h:
 
@@ -16,3 +17,7 @@ main.o: ../main.cpp ../Game.h ../Board.h ../Player.h ../GameLogic.h \
 ../AiPlayer.h:
 
 ../ReversiLogic.h:
+
+../Printer.h:
+
+../Game.h:

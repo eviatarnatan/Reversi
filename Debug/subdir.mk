@@ -9,10 +9,27 @@ CPP_SRCS += \
 ../Game.cpp \
 ../GameLogic.cpp \
 ../HumanPlayer.cpp \
+../LocalGame.cpp \
 ../Player.cpp \
 ../Point.cpp \
+../Printer.cpp \
+../RemotePlayer.cpp \
 ../ReversiLogic.cpp \
 ../main.cpp 
+
+O_SRCS += \
+../AiPlayer.o \
+../Board.o \
+../Game.o \
+../GameLogic.o \
+../HumanPlayer.o \
+../LocalGame.o \
+../Player.o \
+../Point.o \
+../Printer.o \
+../RemotePlayer.o \
+../ReversiLogic.o \
+../main.o 
 
 OBJS += \
 ./AiPlayer.o \
@@ -20,8 +37,11 @@ OBJS += \
 ./Game.o \
 ./GameLogic.o \
 ./HumanPlayer.o \
+./LocalGame.o \
 ./Player.o \
 ./Point.o \
+./Printer.o \
+./RemotePlayer.o \
 ./ReversiLogic.o \
 ./main.o 
 
@@ -31,8 +51,11 @@ CPP_DEPS += \
 ./Game.d \
 ./GameLogic.d \
 ./HumanPlayer.d \
+./LocalGame.d \
 ./Player.d \
 ./Point.d \
+./Printer.d \
+./RemotePlayer.d \
 ./ReversiLogic.d \
 ./main.d 
 

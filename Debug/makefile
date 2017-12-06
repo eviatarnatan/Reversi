@@ -37,19 +37,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: ex3-Object\ Oriented
+all: Advanced\ Programming\ 1\ -\ Reversi\ Project
 
 # Tool invocations
-ex3-Object\ Oriented: $(OBJS) $(USER_OBJS)
+Advanced\ Programming\ 1\ -\ Reversi\ Project: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	g++  -o "ex3-Object Oriented" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++  -o "Advanced Programming 1 - Reversi Project" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) "ex3-Object Oriented"
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) "Advanced Programming 1 - Reversi Project"
 	-@echo ' '
 
 .PHONY: all clean dependents

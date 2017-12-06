@@ -1,3 +1,13 @@
+commit 3dbff03fed2b4a2d764ebf73d10cfae4f8a9e183
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Thu Nov 30 22:01:27 2017 +0200
+
+    Added new tests and test files.
+    Tests are now separated to different classes.
+    Changed wrong data member which returned from HumanPlayer and AiPlayer functions to the correct one.
+    Changed the construction of the HumanPlayer and AiPlayer (now they receive their symbol inside their constructor, based on given parameters.
+    Added new comments, and modified some.
+
 commit 8cc68a041e93345fbbd55c647f9b358bb10bcc56
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Wed Nov 29 22:32:38 2017 +0200
