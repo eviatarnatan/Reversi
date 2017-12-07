@@ -1,3 +1,17 @@
+commit a0c5c51574541e337a4bb7faec26ae923e5e05af
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Wed Dec 6 22:08:42 2017 +0200
+
+    Made a few changes in structure:
+    -Renamed Game class to LocalGame class, which will handle local games.
+    -Added the Game interface, from which local and remote game classes will inherit.
+    -Game arguments will be created in main and passed to LocalGame class.
+    -Deleted initialize function from LocalGame class (will be implemented in main).
+    
+    in addition, the following classes were added:
+    -Printer - responsible for printing specific game messages.
+    -RemotePlayer - creates a remote player for a remote game (in progress, not useable yet).
+
 commit 3dbff03fed2b4a2d764ebf73d10cfae4f8a9e183
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Thu Nov 30 22:01:27 2017 +0200

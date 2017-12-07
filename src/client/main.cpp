@@ -12,12 +12,12 @@
 #include <iostream>
 
 #include "LocalGame.h"
-
+#include "RemoteGame.h"
 int main () {
 
 	Printer printer;
 	printer.welcomeMessage();
-	LocalGame *game;
+	Game *game;
 	Player *player;
 	Player *player2;
 	GameLogic *logic = new ReversiLogic();
@@ -34,19 +34,24 @@ int main () {
 			cin.ignore(256, '\n');
 		}
 		if (game_choice == 1) {
-			cout << "You've chosen a game against another player" << endl;
-			player2 = new HumanPlayer('O','X');
-			game = new LocalGame(logic, player, player2, board_size);
-			break;
+				cout << "You've chosen a game against another player" << endl;
+				player2 = new HumanPlayer('O','X');
+				game = new LocalGame(logic, player, player2, board_size);
+				break;
 		} else if (game_choice == 2) {
-			cout <<"You've chosen a game against the computer" << endl;
-			player2 = new AiPlayer('O','X');
-			game = new LocalGame(logic, player, player2, board_size);
-			break;
+				cout <<"You've chosen a game against the computer" << endl;
+				player2 = new AiPlayer('O','X');
+				game = new LocalGame(logic, player, player2, board_size);
+				break;
+		} else if (game_choice == 3) {
+				//first logged player is assumed to be the X player.
+				player2 = new RemotePlayer("127.0.0.1", 8000, 'X');
+				game = new RemoteGame(logic, player2, board_size);
+				break;
 		} else {
 			cout << "Invalid choice. Please choose a valid choice." << endl;
 		}
-	} while (game_choice != 1 || game_choice != 2);
+	} while (game_choice != 1 || game_choice != 2 || game_choice != 3);
   game->play();
   game->end();
   delete game;
