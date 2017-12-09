@@ -21,35 +21,35 @@ public:
   /*
    * returns the current amount of discs the player has.
    */
-  int getDisksNum();
+  virtual int getDisksNum();
   /*
    * adds new amount of discs to the amount the player has.
    */
-  void setDisksNum(int disks_num);
+  virtual void setDisksNum(int disks_num);
   /*
    * gets the player's turn status.
    */
-  bool getMyTurn();
+  virtual bool getMyTurn();
   /*
    * sets the player's turn status.
    */
-  void setMyTurn(bool status);
+  virtual void setMyTurn(bool status);
   /*
    * returns the symbol (O/X) of the player.
    */
-  char getSymbol();
+  virtual char getSymbol();
   /*
    * sets the symbol (O/X) of the player.
    */
-  void setSymbol(char symbol);
+  virtual void setSymbol(char symbol);
   /*
    * returns the symbol (O/X) of the opposite player.
    */
-  char getOppositeSymbol();
+  virtual char getOppositeSymbol();
   /*
    * sets the symbol (O/X) of the opposite player.
    */
-  void setOppositeSymbol(char other_symbol);
+  virtual void setOppositeSymbol(char other_symbol);
   /*
    * the player's turn. on each turn, the player will see the available moves
    * that he can make, and choose his desired move. the board will be updated

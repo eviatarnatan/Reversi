@@ -10,11 +10,12 @@
 #include "Player.h"
 class RemotePlayer : public Player{
 public:
-	RemotePlayer(const char *serverIP, int serverPort, char Symbol);
+	RemotePlayer(const char *serverIP, int serverPort, char Symbol, char other_symbol);
 	void connectToServer();
   /*
    * returns the current amount of discs the player has.
    */
+	void getPlayingOrderSymbol();
   virtual int getDisksNum();
   /*
    * adds new amount of discs to the amount the player has.
@@ -52,11 +53,18 @@ public:
    * to the other player.
    */
   virtual void turn(GameLogic*& logic, Board*& board, Player*& other);
+  Point RemoteTurn(GameLogic*& logic, Board*& board);
+  void sendPoint(Point move);
+  Point receivePoint();
 	virtual ~RemotePlayer();
 private:
-	int client_socket_;
-	int server_port_;
 	const char *server_IP_;
+	int server_port_;
+	int client_socket_;
+  int disks_num_;
+  bool my_turn_;
+	char symbol_;
+	char other_symbol_;
 };
 
 #endif /* REMOTEPLAYER_H_ */

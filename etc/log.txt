@@ -1,3 +1,17 @@
+commit 30e03567ac0f885aa6c936505ba26ce3bf255bce
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Thu Dec 7 02:26:52 2017 +0200
+
+    New Folders has been added:
+    -src: contains 2 folders:
+          1. client: contains the source code and makefile for the client (has been moved from the main folder)
+          2. server: contains the source code and makefile for the server (currently empty)
+    -exe: contains client and serve running files, and additional files in order to run them
+    -etc: contains the log.txt file (moved from the main folder) and the info.txt file, which has been added now.
+    
+    RemoteGame class has been added (still in progress).
+    A few classes has been modified.
+
 commit a0c5c51574541e337a4bb7faec26ae923e5e05af
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Wed Dec 6 22:08:42 2017 +0200

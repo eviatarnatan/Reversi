@@ -20,23 +20,23 @@ public:
    * the constructor - receives two points and sets them as
    * the x and y value of the new created point.
    */
-  Point(double x_index, double y_index);
+  Point(int x_index, int y_index);
   /*
    * returns the x value of the point.
    */
-  double getPointX();
+  int getPointX();
   /*
    * returns the y value of the point.
    */
-  double getPointY();
+  int getPointY();
   /*
    * sets a new x value to the point.
    */
-  void setPointX(double x_index);
+  void setPointX(int x_index);
   /*
    * sets a new y value to the point.
    */
-  void setPointY(double y_index);
+  void setPointY(int y_index);
   /*
    * the default destructor.
    */

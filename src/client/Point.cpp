@@ -11,21 +11,21 @@
 
 #include "Point.h"
 
-Point::Point(double x_index, double y_index) {
+Point::Point(int x_index, int y_index) {
   // TODO Auto-generated constructor stub
   x_=x_index;
   y_=y_index;
 }
-double Point::getPointX() {
+int Point::getPointX() {
   return x_;
 }
-double Point::getPointY() {
+int Point::getPointY() {
   return y_;
 }
-void Point::setPointX(double x_index) {
+void Point::setPointX(int x_index) {
   x_=x_index;
 }
-void Point::setPointY(double y_index) {
+void Point::setPointY(int y_index) {
   y_=y_index;
 }
 Point::~Point() {
