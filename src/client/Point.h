@@ -42,8 +42,8 @@ public:
    */
   virtual ~Point();
 private:
-  double x_;
-  double y_;
+  int x_;
+  int y_;
 };
 
 #endif /* POINT_H_ */

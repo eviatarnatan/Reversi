@@ -1,4 +1,8 @@
 /*
+ * Eviatar Natan
+ * 307851808
+ */
+/*
  * Server.cpp
  *
  *  Created on: Dec 5, 2017
@@ -7,6 +11,7 @@
 
 #include "Server.h"
 #include <sys/socket.h>
+#include <poll.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
@@ -102,7 +107,9 @@ void Server::handleClient(int player_socket, int player2_socket) {
 		if (x_value == end_game && y_value == end_game) {
 			return;
 		}
-		cout << "got point:" << x_value << " " << y_value;
+		/*if (isClientClosed(player2_socket)) {
+			return;
+		}*/
 		n = write(player2_socket, &x_value, sizeof(x_value));
 		if (n == -1) {
 			cout << "error writing to socket";
@@ -131,7 +138,9 @@ void Server::handleClient(int player_socket, int player2_socket) {
 		if (x_value == end_game && y_value == end_game) {
 			return;
 		}
-		cout << "got point:" << x_value << " " << y_value;
+		/*if (isClientClosed(player_socket)) {
+			return;
+		}*/
 		n = write(player_socket, &x_value, sizeof(x_value));
 		if (n == -1) {
 			cout << "error writing to socket";
@@ -142,6 +151,22 @@ void Server::handleClient(int player_socket, int player2_socket) {
 		}
 	}
 
+}
+bool Server::isClientClosed(int player_socket) {
+	pollfd pfd;
+	pfd.fd = player_socket;
+	pfd.events = POLLIN | POLLHUP | POLLRDNORM;
+	pfd.revents = 0;
+		//call poll with a timeout of 100 ms
+		if (poll(&pfd, 1, 100) > 0) {
+			//if result>0, data available on socket or socket has been closed.
+			char buffer[32];
+			if (recv(player_socket,buffer,sizeof(buffer),MSG_PEEK | MSG_DONTWAIT) ==0) {
+				//if recv returns zero, it means the connection has been closed.
+				return true;
+			}
+		}
+	return false;
 }
 void Server::stop(){
 	close(server_socket_);

@@ -17,7 +17,6 @@
 #include "AiPlayer.h"
 #include "GameLogic.h"
 #include "ReversiLogic.h"
-#include "Printer.h"
 #include "Game.h"
 #include <iostream>
 /*

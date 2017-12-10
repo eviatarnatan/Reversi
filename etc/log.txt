@@ -1,3 +1,11 @@
+commit 28f69010bb5945cd9fc89cb2aa6c959f43fe1209
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Sat Dec 9 14:45:21 2017 +0200
+
+    Added source files to the server folder.
+    It is now possible to play a game against a remote player.
+    Several minor changes (comments, function parameters, etc.).
+
 commit 30e03567ac0f885aa6c936505ba26ce3bf255bce
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Thu Dec 7 02:26:52 2017 +0200

@@ -1,4 +1,8 @@
 /*
+ * Eviatar Natan
+ * 307851808
+ */
+/*
  * RemotePlayer.cpp
  *
  *  Created on: Dec 5, 2017
@@ -17,13 +21,10 @@ using namespace std;
 RemotePlayer::RemotePlayer(const char *serverIP, int serverPort, char symbol,
 		char other_symbol):
 	server_IP_(serverIP), server_port_(serverPort), client_socket_(0) {
-	// TODO Auto-generated constructor stub
 	disks_num_ = 2;
 	my_turn_ = false;
 	symbol_ = symbol;
 	other_symbol_ = other_symbol;
-	cout << "Client" <<endl;
-	//server_IP_ =
 }
 
 void RemotePlayer::connectToServer() {
@@ -68,22 +69,17 @@ void RemotePlayer::getPlayingOrderSymbol() {
 	}
 	else {
 		if (get_player_order == 1) {
-			cout << "Waiting for other player to connect" << endl;
 			//wait for other player to join before making the first move
 			player_order = read(client_socket_,&wait_for_player,sizeof(wait_for_player));
 			if (player_order == -1) {
 				cout << "error reading from socket" << endl;
 			}
 			cout << "Order: 1 - You play black ('X')" << endl;
-			cout << "your color: " << this->getSymbol() <<endl;
-			cout << "other color: " << this->getOppositeSymbol() <<endl;
 		}
 		else {
 			cout << "Order: 2 - You play white ('O')" << endl;
 			this->setSymbol('O');
 			this->setOppositeSymbol('X');
-			cout << "your color: " << this->getSymbol() <<endl;
-			cout << "other color: " << this->getOppositeSymbol() <<endl;
 		}
 	}
 }
@@ -111,14 +107,13 @@ char RemotePlayer::getOppositeSymbol() {
 void RemotePlayer::setOppositeSymbol(char other_symbol) {
   other_symbol_ = other_symbol;
 }
-//not used for this class
 void RemotePlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
 
 }
 Point RemotePlayer::RemoteTurn(GameLogic*& logic, Board*& board){
 	 int row, column;
 	 vector<Point> possible_moves;
-	 vector<Point>& moves_ref=possible_moves;
+	 vector<Point>& moves_ref = possible_moves;
 	 char &symbol = symbol_;
 	 char &other_symbol = other_symbol_;
 	 cout << symbol_ << ": It's your move." << endl;
@@ -146,15 +141,14 @@ Point RemotePlayer::RemoteTurn(GameLogic*& logic, Board*& board){
 	 }
 	 bool legal = false;
 	 cout << "Please enter your move row col:";
-	 while (true){
-	   while (true){
+	 while (true) {
+	   while (true) {
 	     cin >> row >> column;
-	     if (!cin.fail()){
+	     if (!cin.fail()) {
 	       //skip bad input
 	       cin.ignore(256, '\n');
 	       break;
-	     }
-	     else{
+	   } else{
 	       // user didn't input a number/bad number and char combo
 	       cout << "Please enter numbers only." << endl;
 	       cin.clear();
@@ -174,20 +168,16 @@ Point RemotePlayer::RemoteTurn(GameLogic*& logic, Board*& board){
 	 }
 	 Point point(row,column);
 	 Point &ref_point = point;
-	 int counter = 0;
 	 //set counter with the current amount of flips occured this turn.
-	 counter = logic->flipDiscs(board,ref_point,symbol,other_symbol);
-	 //setDisksNum(1+counter);
-	 //other->setDisksNum(-counter);
+	 logic->flipDiscs(board,ref_point,symbol,other_symbol);
 	 board->print();
-	 //cout << symbol_ << " played (" << row << "," << column << ")" << endl << endl;
 	 return point;
 }
 void RemotePlayer::sendPoint(Point move) {
 	int x_value = move.getPointX();
 	int y_value = move.getPointY();
 	//sending x value to server
-	int n= write(client_socket_, &x_value,sizeof(x_value));
+	int n = write(client_socket_, &x_value,sizeof(x_value));
 	if (n == -1) {
 		throw "error writing to socket";
 	}
