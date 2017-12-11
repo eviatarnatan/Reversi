@@ -77,7 +77,6 @@ void Server::start(){
 			return;
 		}
 	handleClient(player_socket, player2_socket);
-
 	// close communications with the clients.
 	close(player_socket);
 	close(player2_socket);
@@ -87,7 +86,6 @@ void Server::handleClient(int player_socket, int player2_socket) {
 	int x_value, y_value;
 	const int end_game = 0 ;
 	while (true) {
-
 		//reads from first player
 		int n = read(player_socket, &x_value, sizeof(x_value));
 		if (n == -1) {
@@ -107,9 +105,6 @@ void Server::handleClient(int player_socket, int player2_socket) {
 		if (x_value == end_game && y_value == end_game) {
 			return;
 		}
-		/*if (isClientClosed(player2_socket)) {
-			return;
-		}*/
 		n = write(player2_socket, &x_value, sizeof(x_value));
 		if (n == -1) {
 			cout << "error writing to socket";
@@ -118,7 +113,6 @@ void Server::handleClient(int player_socket, int player2_socket) {
 		if (n == -1) {
 			cout << "error writing to socket";
 		}
-
 		//reads from second player
 		n = read(player2_socket, &x_value, sizeof(x_value));
 		if (n == -1) {
@@ -138,9 +132,6 @@ void Server::handleClient(int player_socket, int player2_socket) {
 		if (x_value == end_game && y_value == end_game) {
 			return;
 		}
-		/*if (isClientClosed(player_socket)) {
-			return;
-		}*/
 		n = write(player_socket, &x_value, sizeof(x_value));
 		if (n == -1) {
 			cout << "error writing to socket";

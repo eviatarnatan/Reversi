@@ -1,3 +1,11 @@
+commit a050440a59452219ca6a0321cebc59e63d70048a
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Sun Dec 10 23:20:50 2017 +0200
+
+    Added the option to read client and server settings from files.
+    Deleted the Printer class (was used only for welcome message, maybe will be brought back later if necessary).
+    Comments for several classes were added.
+
 commit 28f69010bb5945cd9fc89cb2aa6c959f43fe1209
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Sat Dec 9 14:45:21 2017 +0200

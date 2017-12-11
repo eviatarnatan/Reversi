@@ -25,7 +25,7 @@ int main () {
 	cout << "2) Play against the computer" << endl;
 	cout << "3) Play against a remote player" << endl;
 	GameLogic *logic = new ReversiLogic();
-	int board_size = 4;
+	int board_size = 8;
 	Game *game;
 	int game_choice;
 	do {

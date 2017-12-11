@@ -58,8 +58,6 @@ void RemoteGame::play() {
 				break;
 			}
 			bool opponent_no_move = false;
-			cout << "my symbol is" << player_->getSymbol() << endl;
-			cout << "my other symbol is" << player_->getOppositeSymbol() << endl;
 			char symbol = player_->getSymbol();
 			char other_symbol = player_->getOppositeSymbol();
 			char &symbol_ref = symbol;
