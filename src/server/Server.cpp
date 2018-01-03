@@ -19,15 +19,24 @@
 #include <stdio.h>
 using namespace std;
 #define MAX_CONNECTED_CLIENTS 10
+pthread_mutex_t lock_server_run;
+pthread_mutex_t lock_server_accept;
+pthread_mutex_t lock_server_wait;
+pthread_mutex_t lock_server_close;
 Server::Server(int port) {
 	// TODO Auto-generated constructor stub
 	port_=port;
 	server_socket_=0;
+	running = 1;
 	cout << "Server" <<endl;
 }
 void Server::start(){
+	pthread_t thread;
 	server_socket_ = socket(AF_INET, SOCK_STREAM, 0);
+	Handler handler;
+	int *client_socket = new int[1];
 	if (server_socket_ == -1) {
+		delete[] client_socket;
 		throw "Error opening socket";
 	}
 	//assign a local address to the socket
@@ -38,129 +47,122 @@ void Server::start(){
 	serverAddress.sin_port = htons(port_);
 	if (bind(server_socket_, (struct sockaddr*)&serverAddress,
 			sizeof(serverAddress)) == -1) {
+				delete[] client_socket;
 				throw "Error on binding";
 			}
 	// start listening to incoming connections
 	listen(server_socket_, MAX_CONNECTED_CLIENTS);
-	// Define the client socket's structures
-	struct sockaddr_in player_address;
-	socklen_t player_address_len;
-	int first_player, second_player;
-	while (true) {
-		cout << "Waiting for client connections..." << endl;
-		int player_socket = accept(server_socket_, (struct sockaddr *)&player_address, &player_address_len);
-		cout <<"Player 1 connected" << endl;
-		if (player_socket == -1) {
-			throw "Error on accept";
-		}
-		first_player = 1;
-		int n = write(player_socket, &first_player, sizeof(first_player));
-		if (n == -1) {
-			cout << "Error writing to socket" << endl;
-			return;
-		}
-		int player2_socket = accept(server_socket_, (struct sockaddr *)&player_address, &player_address_len);
-				cout <<"Player 2 connected" << endl;
-				if (player2_socket == -1) {
-					throw "Error on accept";
-				}
-		second_player = 2;
-		n = write(player2_socket, &second_player, sizeof(second_player));
-		if (n == -1) {
-			cout << "Error writing to socket" << endl;
-			return;
-	  }
-		// write to make the first player wait for the second player connection
-		n = write(player_socket, &second_player, sizeof(second_player));
-		if (n == -1) {
-			cout << "error writing to socket";
-			return;
-		}
-	handleClient(player_socket, player2_socket);
-	// close communications with the clients.
-	close(player_socket);
-	close(player2_socket);
-  }
-}
-void Server::handleClient(int player_socket, int player2_socket) {
-	int x_value, y_value;
-	const int end_game = 0 ;
-	while (true) {
-		//reads from first player
-		int n = read(player_socket, &x_value, sizeof(x_value));
-		if (n == -1) {
-			cout << "error reading x value" << endl;
-			return;
-		}
-		if (n == 0) {
-			cout << "player disconnected" << endl;
-			return;
-		}
-		n = read(player_socket, &y_value, sizeof(y_value));
-		if (n == -1) {
-			cout << "error reading y value" << endl;
-			return;
-		}
-		// return if both players have no available moves
-		if (x_value == end_game && y_value == end_game) {
-			return;
-		}
-		n = write(player2_socket, &x_value, sizeof(x_value));
-		if (n == -1) {
-			cout << "error writing to socket";
-		}
-		n = write(player2_socket, &y_value, sizeof(y_value));
-		if (n == -1) {
-			cout << "error writing to socket";
-		}
-		//reads from second player
-		n = read(player2_socket, &x_value, sizeof(x_value));
-		if (n == -1) {
-			cout << "error reading x value" << endl;
-			return;
-		}
-		if (n == 0) {
-			cout << "player disconnected" << endl;
-			return;
-		}
-		n = read(player2_socket, &y_value, sizeof(y_value));
-		if (n == -1) {
-			cout << "error reading y value" << endl;
-			return;
-		}
-		// return if both players have no available moves
-		if (x_value == end_game && y_value == end_game) {
-			return;
-		}
-		n = write(player_socket, &x_value, sizeof(x_value));
-		if (n == -1) {
-			cout << "error writing to socket";
-		}
-		n = write(player_socket, &y_value, sizeof(y_value));
-		if (n == -1) {
-			cout << "error writing to socket";
-		}
+	cout << "In server:\n" << endl;
+	cout << "listening to port\n" << endl;
+	Info *info = new Info();
+	info->handler = &handler;
+	info->running = &running;
+	// accepts a new client connection
+	AcceptStruct *accept_struct = new AcceptStruct();
+	pthread_mutex_lock(&lock_server_run);
+	accept_struct->server_socket = &server_socket_;
+	pthread_mutex_unlock(&lock_server_run);
+	accept_struct->client_socket = client_socket;
+	pthread_mutex_lock(&lock_server_run);
+	accept_struct->handler = &handler;
+	pthread_mutex_unlock(&lock_server_run);
+	pthread_mutex_lock(&lock_server_run);
+	accept_struct->running = &running;
+	pthread_mutex_unlock(&lock_server_run);
+	try {
+			// creates a thread that waits for exit message to close server
+			pthread_create(&thread, NULL, waitForCloseMessage, (void *)info);
+	} catch (const char *message) {
+			delete info;
+			delete accept_struct;
+			delete[] client_socket;
+			throw message;
 	}
-
-}
-bool Server::isClientClosed(int player_socket) {
-	pollfd pfd;
-	pfd.fd = player_socket;
-	pfd.events = POLLIN | POLLHUP | POLLRDNORM;
-	pfd.revents = 0;
-		//call poll with a timeout of 100 ms
-		if (poll(&pfd, 1, 100) > 0) {
-			//if result>0, data available on socket or socket has been closed.
-			char buffer[32];
-			if (recv(player_socket,buffer,sizeof(buffer),MSG_PEEK | MSG_DONTWAIT) ==0) {
-				//if recv returns zero, it means the connection has been closed.
-				return true;
+	try {
+			// creates a thread in charge of accepting new clients
+			pthread_create(&thread, NULL, acceptNewClient, (void *) accept_struct);
+	} catch (const char *msg) {
+			delete info;
+			delete accept_struct;
+			delete[] client_socket;
+			throw msg;
+	}
+	// while exit command wasn't entered
+	while(true) {
+			pthread_mutex_lock(&lock_server_run);
+			// if exit command has been entered
+			if(running == 0) {
+					pthread_mutex_unlock(&lock_server_run);
+					break;
 			}
-		}
-	return false;
+			pthread_mutex_unlock(&lock_server_run);
+	}
+	delete info;
+	delete accept_struct;
+	delete[] client_socket;
 }
-void Server::stop(){
-	close(server_socket_);
+void* Server::acceptNewClient(void *accept_struct) {
+    AcceptStruct *accept_struct1 = (AcceptStruct*)accept_struct;
+    pthread_mutex_lock(&lock_server_accept);
+    int serverSocket = *accept_struct1->server_socket;
+    pthread_mutex_unlock(&lock_server_accept);
+    pthread_mutex_lock(&lock_server_accept);
+    Handler *handler = accept_struct1->handler;
+    pthread_mutex_unlock(&lock_server_accept);
+    pthread_mutex_lock(&lock_server_accept);
+    int is_running = *accept_struct1->running;
+    pthread_mutex_unlock(&lock_server_accept);
+    int temp_client_socket = 0;
+    // as long as server is running
+    while (is_running) {
+        cout << "Waiting for client connections..." << endl;
+        struct sockaddr_in firstClientAddress;
+        socklen_t firstClientAddressLen;
+        // accepting the client
+        temp_client_socket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
+                                              &firstClientAddressLen);
+        pthread_mutex_lock(&lock_server_accept);
+        *accept_struct1->client_socket = temp_client_socket;
+        pthread_mutex_unlock(&lock_server_accept);
+        pthread_mutex_lock(&lock_server_accept);
+        try {
+            // run handler
+            handler->run(temp_client_socket);
+        } catch (const char* msg) {
+            pthread_mutex_unlock(&lock_server_accept);
+            delete accept_struct1;
+            throw msg;
+        }
+        pthread_mutex_unlock(&lock_server_accept);
+        pthread_mutex_lock(&lock_server_accept);
+        // update servers running status
+        is_running = *accept_struct1->running;
+        pthread_mutex_unlock(&lock_server_accept);
+    }
+    delete accept_struct1;
+}
+
+void *Server::waitForCloseMessage(void* info) {
+    Info *info1 = (Info*)info;
+    string close_server;
+    // waits to receive "exit"
+    do {
+        cin >> close_server;
+    } while(close_server.compare("exit") != 0);
+    pthread_mutex_lock(&lock_server_wait);
+    info1->handler->closeThreads();
+    pthread_mutex_unlock(&lock_server_wait);
+    pthread_mutex_lock(&lock_server_wait);
+    // updates servers running status
+    *info1->running = 0;
+    pthread_mutex_unlock(&lock_server_wait);
+}
+
+void Server::stop() {
+    pthread_mutex_lock(&lock_server_close);
+    // close the server's socket
+    close(server_socket_);
+    pthread_mutex_unlock(&lock_server_close);
 }
 Server::~Server() {
 	// TODO Auto-generated destructor stub

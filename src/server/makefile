@@ -1,5 +1,5 @@
 a.out: compileAll
-	g++ *.o -o ../../exe/server/server.out
+	g++ *.o -lpthread -o ../../exe/server/server.out
 	rm -f *.o
 
 compileAll: *.h *.cpp

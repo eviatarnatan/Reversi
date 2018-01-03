@@ -13,8 +13,8 @@
 
 Point::Point(int x_index, int y_index) {
   // TODO Auto-generated constructor stub
-  x_=x_index;
-  y_=y_index;
+  x_ = x_index;
+  y_ = y_index;
 }
 int Point::getPointX() {
   return x_;

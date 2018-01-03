@@ -11,11 +11,40 @@
 
 #ifndef SERVER_H_
 #define SERVER_H_
+#include "CommandsManager.h"
+#include "Game.h"
+#include "Handler.h"
+#include <string.h>
+#include <cstdlib>
+#include <pthread.h>
+#define MAX_CONNECTED_CLIENTS 10
+#define STARTMESSAGE "Start"
+#define BUFFERSIZE 200
+#define FIRST 1
+#define SECOND 2
+
+/*
+ * holds info sent to static functions in handler
+ */
+typedef struct AcceptStruct {
+    Handler *handler;
+    int *running;
+    int *client_socket;
+    int *server_socket;
+}AcceptStruct;
+
+/*
+ * holds info for waitForCloseMessage function.
+ */
+typedef struct Info {
+    Handler *handler;
+    int *running;
+}Info;
 
 class Server {
 public:
 	/*
-	 * the constructor. receive a port and sets the port and the socket.
+	 * the server constructor.
 	 */
 	Server(int port);
 	/*
@@ -25,28 +54,25 @@ public:
 	 */
 	void start();
 	/*
-	 * checks if the client that waits for the other player has closed his
-	 * connection.
-	 */
-
-	bool isClientClosed(int player_socket);
-	/*
 	 * stops the server socket
 	 */
 	void stop();
 	/*
-	 * default destructor
+	 * receives a struct with client and accepts new client
+	 */
+  static void *acceptNewClient(void* acceptStruct);
+  /*
+   * wait for close message, and then closes all threads, games and the server.
+   */
+static void *waitForCloseMessage(void* handler);
+	/*
+	 * the destructor
 	 */
 	virtual ~Server();
 private:
 	int port_;
 	int server_socket_;
-	/*
-	 * handles the client. receives a socket from each player and while
-	 * the game isn't over, reads and writes points from one client to
-	 * the other.
-	 */
-	void handleClient(int player_socket, int player2_socket);
+	int running;
 };
 
 #endif /* SERVER_H_ */

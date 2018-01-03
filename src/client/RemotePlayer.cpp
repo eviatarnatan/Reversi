@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 using namespace std;
 RemotePlayer::RemotePlayer(const char *serverIP, int serverPort, char symbol,
 		char other_symbol):
@@ -59,30 +60,6 @@ void RemotePlayer::connectToServer() {
 	cout << "Connected to server" << endl;
 	cout << "Waiting for other player to join..." << endl;
 }
-void RemotePlayer::getPlayingOrderSymbol() {
-	int get_player_order;
-	int wait_for_player;
-	int player_order;
-	player_order =read(client_socket_,&get_player_order, sizeof(get_player_order));
-	if (player_order == -1) {
-		cout << "Error reading player order from socket" << endl;
-	}
-	else {
-		if (get_player_order == 1) {
-			//wait for other player to join before making the first move
-			player_order = read(client_socket_,&wait_for_player,sizeof(wait_for_player));
-			if (player_order == -1) {
-				cout << "error reading from socket" << endl;
-			}
-			cout << "Order: 1 - You play black ('X')" << endl;
-		}
-		else {
-			cout << "Order: 2 - You play white ('O')" << endl;
-			this->setSymbol('O');
-			this->setOppositeSymbol('X');
-		}
-	}
-}
 int RemotePlayer::getDisksNum() {
   return disks_num_;
 }
@@ -110,6 +87,27 @@ void RemotePlayer::setOppositeSymbol(char other_symbol) {
 void RemotePlayer::turn(GameLogic*& logic, Board*& board, Player*& other) {
 
 }
+void RemotePlayer::getPlayingOrderSymbol() {
+	int player_order;
+	char buffer[BUFFERSIZE];
+	//reading playing number from server
+	player_order = read(client_socket_,buffer,BUFFERSIZE*sizeof(char));
+	if (player_order == -1) {
+		throw "Error reading player order from socket";
+	}
+	if(strcmp(buffer, "close") == 0) {
+	        throw "Game closed";
+	}
+	player_order = buffer[0];
+	if (player_order == 1) {
+		cout << "you play black 'X'" << endl;
+	}
+	if(player_order == 2) {
+		cout << "you play white 'O'" << endl;
+	  setSymbol('O');
+	  setOppositeSymbol('X');
+	}
+}
 Point RemotePlayer::RemoteTurn(GameLogic*& logic, Board*& board){
 	 int row, column;
 	 vector<Point> possible_moves;
@@ -136,7 +134,7 @@ Point RemotePlayer::RemoteTurn(GameLogic*& logic, Board*& board){
 	 else{
 	   cout << "no possible moves. play passes back to the other player." << endl;
 	   setMyTurn(false);
-	   Point no_move(-1,-1);
+	   Point no_move(0,0);
 	   return no_move;
 	 }
 	 bool legal = false;
@@ -168,37 +166,236 @@ Point RemotePlayer::RemoteTurn(GameLogic*& logic, Board*& board){
 	 }
 	 Point point(row,column);
 	 Point &ref_point = point;
-	 //set counter with the current amount of flips occured this turn.
 	 logic->flipDiscs(board,ref_point,symbol,other_symbol);
 	 board->print();
 	 return point;
 }
 void RemotePlayer::sendPoint(Point move) {
+	string play = "play ";
 	int x_value = move.getPointX();
 	int y_value = move.getPointY();
-	//sending x value to server
-	int n = write(client_socket_, &x_value,sizeof(x_value));
+	char message[BUFFERSIZE] = {0};
+	if(x_value == -3 && y_value == -3) {
+			play = "close";
+			cout << play << endl;
+	} else {
+			char num;
+			//converting values by ascii
+			num = (char) (x_value + 48);
+			play = play + num + " ";
+			num = (char) (y_value + 48);
+			play = play + num;
+			cout << play << endl;
+	  }
+	strcpy(message, play.c_str());
+	int n = write(client_socket_, message, BUFFERSIZE*sizeof(char));
 	if (n == -1) {
+		if (x_value == -3 && y_value == -3) {
+			throw "game closed";
+		}
 		throw "error writing to socket";
 	}
-	//sending y value to server
-	n = write(client_socket_, &y_value, sizeof(y_value));
-	if (n == -1) {
-		throw "error writing to socket";
+	if (n == 0) {
+		if (x_value == -3 && y_value == -3) {
+			throw "game closed";
+		}
+		throw "error, opponent disconnected...";
 	}
 }
 Point RemotePlayer::receivePoint() {
-	int x_value, y_value;
-	int n = read(client_socket_, &x_value, sizeof(x_value));
-	if (n == -1) {
-		throw "error reading from socket";
-	}
-	n = read(client_socket_, &y_value, sizeof(y_value));
-	if (n == -1) {
-		throw "error reading from socket";
-	}
-	Point recent_move(x_value,y_value);
+	int n;
+	Point recent_move(-4, -4);
+	char buffer[BUFFERSIZE] = {0};
+	do {
+		n = read(client_socket_, buffer, BUFFERSIZE*sizeof(char));
+		if (n == -1) {
+			throw "error reading from socket";
+		}
+		if (n == 0) {
+			throw "game closed";
+		}
+		if (strcmp(buffer, "close") == 0) {
+			recent_move.setPointX(-3);
+			recent_move.setPointY(-3);
+			close(client_socket_);
+			return recent_move;
+		}
+		recent_move = analyzeData(buffer);
+	} while ((recent_move.getPointX() < 0 || recent_move.getPointY() < 0) &&
+			(recent_move.getPointX() != -2 && recent_move.getPointY() != -2));
 	return recent_move;
+}
+
+void RemotePlayer::mainMenuPlayerChoice() {
+	string command, name = "";
+	char msg[BUFFERSIZE] = {0};
+  char receive[BUFFERSIZE] = {0};
+  char list[BUFFERSIZE] = {0};
+	int player_choice, n, size_of_list;
+	bool flag = false;
+	while (!flag) {
+		cout << "Welcome to our server! in order to play, please choose one"
+				<<" of the following options:" << endl;
+		cout << "1) Start a new game: type start <name>" << endl;
+		cout << "2) Get the list of games: type list_games" << endl;
+		cout << "3) Join a game: type join <name>" << endl;
+		//cin >> player_choice;
+	   while (true) {
+	     cin >> player_choice;
+	     if (!cin.fail()) {
+	       //skip bad input
+	       cin.ignore(50, '\n');
+	       break;
+	   } else{
+	       // user didn't input a number/bad number and char combo
+	       cout << "Please enter numbers only." << endl;
+	       cin.clear();
+	       cin.ignore(256, '\n');
+	       continue;
+	     }
+	   }
+		if (player_choice != 1 && player_choice != 2 && player_choice != 3) {
+			cout << "invalid choice, please choose a valid choice" << endl;
+			continue;
+		}
+		if (player_choice == 1 || player_choice == 3) {
+			//enter the name of the game
+			cin >> name;
+		}
+		if (player_choice == 1) {
+				command = "start " + name;
+		} else if (player_choice == 2) {
+				command = "list_games";
+		} else if (player_choice == 3) {
+				command = "join " + name;
+		} else {
+				command = "invalidOption";
+		}
+		strcpy(msg, command.c_str());
+		cout << msg << endl;
+		n = write(client_socket_, msg, BUFFERSIZE * sizeof(char));
+		if (n == -1) {
+			throw "failed to write command to server";
+		}
+		if (n == 0) {
+			throw "connection error";
+		}
+		if (player_choice == 1 || player_choice == 3) {
+			do {
+				//reads the answer from the server
+				n = read(client_socket_, receive, BUFFERSIZE * sizeof(char));
+				if (n == -1) {
+					throw "error reading answer from server";
+				}
+				if (n == 0) {
+					throw "connection error";
+				}
+			} while (strcmp(receive,"") == 0);
+		}
+		if (command == "list_games") {
+			n = read(client_socket_, &size_of_list, sizeof(size_of_list));
+			if (n == -1) {
+				throw "error reading list's size from server";
+			}
+			if (n == 0) {
+				throw "connection error";
+			}
+			n = read(client_socket_, list, BUFFERSIZE * sizeof(char));
+			if (n == -1) {
+				throw "error reading game list from server";
+			}
+			if (n == 0) {
+				throw "connection error";
+			}
+			if (size_of_list== 0) {
+					cout << "there are currently no games on the server" << endl;
+					cout << "you can create a new one by entering: '1 ' + 'game_name'" << endl;
+					reconnect();
+					continue;
+		  } else {
+					cout << "list of games that you can join:" << endl;
+					for (int i = 0; i < size_of_list; i++) {
+						cout << list[i];
+					}
+					cout << endl;
+					reconnect();
+					continue;
+			}
+		}
+		//if player tried to join a non exist game, or create one that exists:
+		else if (strcmp(receive, "NotExist") == 0) {
+			cout << "you can't join the game because it does not exists or it's full already" << endl;
+			cout << "however, you can create a game with that name" << endl;
+			reconnect();
+			continue;
+		}
+		else if (strcmp(receive, "AlreadyExist") == 0) {
+			cout << "you can't create a game with that name because it's already exists" << endl;
+			reconnect();
+			continue;
+		}
+		//player choice was successful, ready to play
+		flag = true;
+	}
+	if (player_choice == 1) {
+		cout << "waiting for another player to join..." << endl;
+	}
+	try {
+		getPlayingOrderSymbol();
+	} catch (const char* msg) {
+		cout << msg << endl;
+		throw msg;
+	}
+}
+Point RemotePlayer::analyzeData(char* buffer) {
+		int x,y;
+    const int num = 2;
+    int i,j, args = 0;
+    string command, arguments[num];
+    for(i=0; i < BUFFERSIZE; i++) {
+        if(buffer[i] != '\0') {
+            if(buffer[i] != ' ') {
+                command.append(sizeof(char) ,buffer[i]);
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+    if(buffer[i] != '\0') {
+        i++;
+    }
+    for(j=i; j < BUFFERSIZE; j++) {
+        if(buffer[j] != '\0') {
+            if(buffer[j] != ' ') {
+                arguments[args].append(sizeof(char), buffer[j]);
+            } else {
+                args += 1;
+            }
+        } else {
+            break;
+        }
+    }
+    if(args == 1 && arguments[1].compare("") != 0) {
+       x = atoi(arguments[0].c_str());
+       y = atoi(arguments[1].c_str());
+    }
+    Point parsed(x,y);
+    return parsed;
+}
+
+void RemotePlayer::reconnect() {
+    close(client_socket_);
+    client_socket_ = 0;
+    try {
+        connectToServer();
+    } catch (const char* msg) {
+        throw msg;
+    }
+}
+void RemotePlayer::closeConnection() {
+	close(client_socket_);
 }
 RemotePlayer::~RemotePlayer() {
 	// TODO Auto-generated destructor stub

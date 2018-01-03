@@ -30,9 +30,9 @@ RemoteGame::RemoteGame(GameLogic *logic, RemotePlayer *player,
 	cout << "success connecting to server" << endl;
 }
 void RemoteGame::play() {
-	//prints the board at the beginning of the game.
 	bool first_turn = true;
 	Point end_game(0,0);
+	//prints the board at the beginning of the game
 	gameboard_->print();
 	if (player_->getSymbol() == 'O') {
 		cout << "waiting for other's player move..." << endl;
@@ -40,6 +40,7 @@ void RemoteGame::play() {
 	vector<Point> moves;
 	vector<Point> moves_ref;
 	while (true) {
+		//enters only during black player's first turn
 		if (player_->getSymbol() == 'X' && first_turn == true) {
 			first_turn = false;
 			Point move(-1,-1);
@@ -49,12 +50,11 @@ void RemoteGame::play() {
 		}
 		//not the first turn
 		else {
-			Point move(-1,-1);;
+			Point move(0,0);
 			move = player_->receivePoint();
-			//checks if both player turns were skipped, in order to end the game.
-			if (move.getPointX() == -2 && move.getPointY() == -2) {
-				end_game.setPointX(0);
-				end_game.setPointY(0);
+			if (move.getPointX() == -3 && move.getPointY() == -3) {
+				move.setPointX(-2);
+				move.setPointY(-2);
 				break;
 			}
 			bool opponent_no_move = false;
@@ -64,9 +64,9 @@ void RemoteGame::play() {
 			char &other_symbol_ref = other_symbol;
 			Point &move_ref = move;
 			// if last moved was skipped
-			if (move.getPointX() == -1 && move.getPointY() == -1) {
+			if (move.getPointX() == 0 && move.getPointY() == 0) {
 				gameboard_->print();
-				cout << other_symbol << "turn was skipped because he had no moves"
+				cout << other_symbol << " turn was skipped because he had no moves"
 						<< endl;
 				opponent_no_move = true;
 			} else {
@@ -76,19 +76,28 @@ void RemoteGame::play() {
 				cout << other_symbol << " played (" << move.getPointX() << ","
 						<< move.getPointY() << ")" << endl << endl;
 			}
+			//current player move
 			move = player_->RemoteTurn(logic_, gameboard_);
-			//if current player has no available moves after previous player turn.
-			if (move.getPointX() == -1 && move.getPointY() == -1
+			//if current player has no moves after previous player had no moves
+			if (move.getPointX() == 0 && move.getPointY() == 0
 					&& opponent_no_move == true) {
-				end_game.setPointX(-2);
-				end_game.setPointY(-2);
+				end_game.setPointX(-3);
+				end_game.setPointY(-3);
 				break;
 			}
 			cout << "Waiting for other's player move..." << endl;
 			player_->sendPoint(move);
 		}
 	}
-	player_->sendPoint(end_game);
+	if (end_game.getPointX() == -3 && end_game.getPointY() == -3) {
+		player_->sendPoint(end_game);
+		cout << "closing connection..." << endl;
+		player_->closeConnection();
+	}
+	else {
+		cout << "closing connection..." << endl;
+		player_->closeConnection();
+	}
 }
 void RemoteGame::end() {
 	int black_discs = 0, white_discs = 0;

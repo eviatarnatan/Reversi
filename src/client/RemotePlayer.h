@@ -12,6 +12,7 @@
 #ifndef REMOTEPLAYER_H_
 #define REMOTEPLAYER_H_
 #include "Player.h"
+#define BUFFERSIZE 200
 class RemotePlayer : public Player{
 public:
 	/*
@@ -28,10 +29,10 @@ public:
 	 */
 	void connectToServer();
   /*
-   * based on the order the two clients have logged on, this function will
-   * determine which player will be black and which will be white. after both
-   * players has been connected to the server, both of them will receive
-   * a number (1 or 2) which will determine their playing order and color.
+   * the player will wait for the server to write a playing number.
+   * if it's 1, the player will play as black 'X'.
+   * if it's 2, the player will play as white 'O'.
+   * if the write result is different from 1 or 2, we'll throw it.
    */
 	void getPlayingOrderSymbol();
 	/*
@@ -74,7 +75,7 @@ public:
    * the player's turn. on each turn, the player will see the available moves
    * that he can make, and choose his desired move. the board will be updated
    * after his choice in case there are no available moves, the returned point
-   * will be (-1,-1), otherwise a vaild point on the board will be returned.
+   * will be (0,0), otherwise a vaild point on the board will be returned.
    */
   Point RemoteTurn(GameLogic*& logic, Board*& board);
   /*
@@ -83,9 +84,31 @@ public:
    */
   void sendPoint(Point move);
   /*
-   * reads a point from the server and writes it back to the current player.
+   * reads a message from the server. the message is then analyzed and then
+   * converts to a point that is returned, which represents the move the other
+   * player has played. will convert to 0,0 or -3,-3 in case of nomoves/close.
    */
   Point receivePoint();
+  /*
+   * the "lobby".
+   * a menu will be printed to the player, from which he can start a new game,
+   * print the list of available games that he can join, or join a game, based
+   * on his choice (1 start, 2 game_list, 3 join).
+   */
+  void mainMenuPlayerChoice();
+  /*
+   * analyze the info received from the server, in order to be able to return
+   * a point to the player that reads the data.
+   */
+  Point analyzeData(char* buffer);
+  /*
+   * disconnect the player from the game, and then reconnects him.
+   */
+  void reconnect();
+  /*
+   * disconnects the player from the game (without reconnecting him).
+   */
+  void closeConnection();
   /*
    * default destructor
    */

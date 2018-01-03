@@ -22,10 +22,13 @@ public:
 	RemoteGame(GameLogic *logic, RemotePlayer *player, int board_size);
 	/*
 	 *the remote game flow. responsible for making moves on the board based on
-	 *the points it receives. if the point (-1,-1) was received, it means
-	 *that the last turn was skipped. if the point (-2,-2) was received, it means
-	 *that both players turns have been skipped in a row, which then stops the
-	 *game flow (because it means that the game is over).
+	 *the points it receives. if the point (0,0) was received, it means
+	 *that the last turn was skipped.if the point (-3,-3) was received, it means:
+	 *1. that both players turns have been skipped in a row, which then stops the
+	 *game.
+	 *2. the server has been closed.
+	 *in both cases, the player's sockets will be closed, and we will return back
+	 *from this function to the main class.
 	 */
 	void play();
 	/*

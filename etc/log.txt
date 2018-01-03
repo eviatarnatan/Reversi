@@ -1,3 +1,11 @@
+commit 5e5083c4aecf7a7a686f3a59fb6fef644655cd40
+Author: EviatarNatan <eviatarnatan1@gmail.com>
+Date:   Mon Dec 11 15:08:11 2017 +0200
+
+    Additional comments.
+    Few files modifications.
+    Removed .o files from src folder.
+
 commit a050440a59452219ca6a0321cebc59e63d70048a
 Author: EviatarNatan <eviatarnatan1@gmail.com>
 Date:   Sun Dec 10 23:20:50 2017 +0200

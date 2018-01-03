@@ -25,7 +25,7 @@ int main () {
 	cout << "2) Play against the computer" << endl;
 	cout << "3) Play against a remote player" << endl;
 	GameLogic *logic = new ReversiLogic();
-	int board_size = 8;
+	int board_size = 4;
 	Game *game;
 	int game_choice;
 	do {
@@ -55,14 +55,16 @@ int main () {
 		} else if (game_choice == 3) {
 				string ip = getIPFromFile();
 				int port = getPortFromFile();
-				RemotePlayer *player = new RemotePlayer(ip.c_str(), port, 'X', 'O');
-				game = new RemoteGame(logic, player, board_size);
-				player->getPlayingOrderSymbol();
+				RemotePlayer *remote_player = new RemotePlayer(ip.c_str(), port, 'X', 'O');
+				game = new RemoteGame(logic, remote_player, board_size);
+				//player->getPlayingOrderSymbol();
+				remote_player->mainMenuPlayerChoice();
 				break;
 		} else {
 			cout << "Invalid choice. Please choose a valid choice." << endl;
 		}
 	} while (game_choice != 1 || game_choice != 2 || game_choice != 3);
+	//start game against another player.
   game->play();
   game->end();
   delete game;
